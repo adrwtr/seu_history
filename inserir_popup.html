@@ -1,0 +1,86 @@
+<md-dialog aria-label="Histórico" ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{ds_titulo_dialogo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()" aria-label="sair">
+                    <ng-md-icon icon="close"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content" style="max-width:800px;max-height:810px; ">
+                <md-content>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Descrição</label>
+                            <textarea ng-model="me_descricao"
+                                id="me_descricao"
+                                name="me_descricao"
+                                rows="5"
+                                md-select-on-focus
+                                md-no-autogrow
+                                style="height: inherit; overflow-y: auto; width:500px;"></textarea>
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <label>tags</label>
+                            <md-chips ng-model="selectedTags"
+                                md-autocomplete-snap
+                                md-transform-chip="transformChip($chip)"
+                                md-require-match="autocompleteRequireMatch">
+
+                                <md-autocomplete
+                                    md-selected-item="selectedItem"
+                                    md-search-text="searchText"
+                                    md-items="item in querySearch(searchText)"
+                                    md-item-text="item.name">
+                                        <span md-highlight-text="searchText">{{item.ds_tag}}</span>
+                                </md-autocomplete>
+
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{$chip.ds_tag}}</strong>
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
+                    </div>
+
+                    <!-- lista de tags -->
+                    <md-content layout-padding>
+                        <md-grid-list
+                            md-cols="5"
+                            md-row-height="3:1"
+                            md-gutter-gt-md="1px"
+                            md-gutter-md="1px"
+                            md-gutter="1px">
+
+                            <md-grid-tile
+                                ng-repeat="arrTagList in arrTagsLista"
+                                ng-style="{
+                                'background': '#E6E6E6'
+                                }">
+                                {{arrTagList.ds_tag}}&nbsp;
+                            </md-grid-tile>
+                        </md-grid-list>
+                    </md-content>
+
+
+
+                </md-content>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button
+                class="md-raised md-primary"
+                ng-click="adicionarHistorico($event)">
+                Confirmar
+            </md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

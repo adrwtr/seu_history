@@ -1,0 +1,52 @@
+<html lang="pt-br" >
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+        <script src="http://cdn.jsdelivr.net/angular-material-icons/0.4.0/angular-material-icons.min.js"></script>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+        <script src="js/index.js"></script>
+
+    <body ng-app="main_app">
+        <div id="layoutContainer" ng-controller="Controller"
+            style="height:100px;" ng-cloak>
+
+
+            <md-toolbar class="md-theme-light">
+                <h2 class="md-toolbar-tools">
+                <span>Histórico</span>
+                </h2>
+            </md-toolbar>
+
+            <md-content>
+
+                <md-list>
+                    <md-list-item class="md-1-line" ng-repeat="arrHistoricoList in arrHistoricoRecente">
+
+                        <div class="md-list-item-text">
+                        <small>
+                        {{arrHistoricoList.dt_cadastro}}<br>
+                        {{arrHistoricoList.me_descricao}}
+                        </small>
+                        </div>
+                    </md-list-item>
+                </md-list>
+
+            </md-content>
+
+
+            <md-button class="md-fab md-fab-bottom-right"
+                aria-label="Add" ng-click="btnAdicionar($event)">
+                <ng-md-icon icon="add"></ng-md-icon>
+            </md-button>
+
+        </div>
+
+    </body>
+</html>
