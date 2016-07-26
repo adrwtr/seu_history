@@ -11,6 +11,7 @@
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
+
         <script src="js/index.js"></script>
 
     <body ng-app="main_app">
@@ -20,12 +21,17 @@
 
             <md-toolbar class="md-theme-light">
                 <h2 class="md-toolbar-tools">
+                <md-button ng-click="toggleLeft()"
+                    class="md-primary" >
+                    <i class="material-icons">date_range</i>
+                </md-button>
                 <span>Histórico</span>
                 </h2>
             </md-toolbar>
 
             <md-content>
 
+                <!-- registros -->
                 <md-list>
                     <md-list-item class="md-1-line" ng-repeat="arrHistoricoList in arrHistoricoRecente">
 
@@ -38,13 +44,84 @@
                     </md-list-item>
                 </md-list>
 
+
+
             </md-content>
 
-
+            <!-- fab button -->
             <md-button class="md-fab md-fab-bottom-right"
                 aria-label="Add" ng-click="btnAdicionar($event)">
                 <ng-md-icon icon="add"></ng-md-icon>
             </md-button>
+
+
+            <!-- side bar -->
+            <md-sidenav
+                class="md-sidenav-left"
+                md-component-id="sidenav_left"
+                md-is-locked-open="false"
+                md-disable-backdrop
+                md-whiteframe="10">
+
+                <md-toolbar class="md-theme-indigo">
+                    <h1 class="md-toolbar-tools">Consultar</h1>
+                </md-toolbar>
+
+                <md-content layout-padding >
+                    <md-button ng-click="close()" class="md-primary" hide-gt-md>
+                        Close Sidenav Left
+                    </md-button>
+
+                    <div layout="row">
+                        <div flex>
+                            <label>Tags</label>
+                            <md-select ng-model="arrTagsBuscaSelecionados"
+                                md-on-close="clearSearchTerm()"
+                                data-md-container-class="selectdemoSelectHeader"
+                                multiple
+                                aria-label="selecione">
+
+                                <md-select-header class="demo-select-header">
+                                    <input ng-model="searchTerm"
+                                       type="search"
+                                       placeholder="Search for a vegetable.."
+                                       class="demo-header-searchbox _md-text">
+                                </md-select-header>
+
+                                <md-optgroup label="tags">
+                                    <md-option ng-value="ds_tag" ng-repeat="ds_tag in arrTagsBusca | filter:searchTerm">
+                                    {{ds_tag}}
+                                    </md-option>
+                                </md-optgroup>
+                            </md-select>
+                        </div>
+                    </div>
+
+                    <div layout="row">
+                        <md-datepicker ng-model="dt_inicial" md-placeholder="Início">
+                        </md-datepicker>
+                    </div>
+
+                    <div layout="row">
+                        <md-datepicker ng-model="dt_final" md-placeholder="Fim">
+                        </md-datepicker>
+                    </div>
+
+
+                    <md-button ng-click="doBusca()"
+                        class="md-primary" >
+                            <i class="material-icons">search</i> Buscar
+                    </md-button>
+
+
+
+
+
+                </md-content>
+            </md-sidenav>
+
+
+
 
         </div>
 

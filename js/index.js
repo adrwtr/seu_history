@@ -15,9 +15,13 @@ App.controller(
         '$mdDialog',
         '$mdMedia',
         '$mdToast',
+        '$timeout',
+        '$mdSidenav',
+        '$element',
         createController
     ]
 );
+
 
 function createController(
     $scope,
@@ -25,7 +29,10 @@ function createController(
     filterFilter,
     $mdDialog,
     $mdMedia,
-    $mdToast
+    $mdToast,
+    $timeout,
+    $mdSidenav,
+    $element
 ) {
     $scope.arrHistoricoRecente = [];
 
@@ -230,5 +237,168 @@ function createController(
         $scope.construtor();
     };
 
+
+
+    $scope.toggleLeft = buildDelayedToggler(
+        'sidenav_left'
+    );
+
+    /**
+     * Supplies a function that will continue to operate until the
+     * time is up.
+     */
+    function debounce(func, wait, context)
+    {
+        var timer;
+
+        return function debounced()
+        {
+            var context = $scope,
+            args = Array.prototype.slice.call(arguments);
+            $timeout.cancel(timer);
+
+            timer = $timeout(
+                function()
+                {
+                    timer = undefined;
+                    func.apply(context, args);
+                },
+                wait || 10
+            );
+        };
+    }
+
+    /**
+     * Build handler to open/close a SideNav; when animation finishes
+     * report completion in console
+     */
+    function buildDelayedToggler(navID)
+    {
+        return debounce(
+            function() {
+                // Component lookup should always be available since we are not using `ng-if`
+                $mdSidenav(navID)
+                    .toggle()
+                    .then(
+                        function () {
+
+                        }
+                    );
+            },
+            200
+        );
+    }
+
+    function buildToggler(navID)
+    {
+        return function() {
+            // Component lookup should always be available since we are not using `ng-if`
+            $mdSidenav(navID)
+                .toggle()
+                .then(function () {
+                    // $log.debug("toggle " + navID + " is done");
+                }
+            );
+        }
+    }
+
     // $scope.btnAdicionar();
+    //
+    //
+    //
+    //
+
+        $scope.closeSideNav = function ()
+        {
+            // Component lookup should always be available since we are not using `ng-if`
+            $mdSidenav('sidenav_left').close()
+                .then(
+                    function ()
+                    {
+                        // $log.debug("close LEFT is done");
+                    }
+                );
+        };
+
+
+        $scope.arrTagsBusca = [];
+        $scope.searchTerm;
+
+        $scope.clearSearchTerm = function() {
+            $scope.searchTerm = '';
+        };
+
+        // The md-select directive eats keydown events for some quick select
+        // logic. Since we have a search input here, we don't need that logic.
+        $element.find('input').on(
+            'keydown',
+            function(ev)
+            {
+                ev.stopPropagation();
+            }
+        );
+
+
+        /**
+         * Listar tags
+         */
+        $scope.getListaTags = function()
+        {
+            $http.get(
+                'ajax/listar_tags.php'
+            )
+            .success(
+                function(data){
+                    if (angular.isArray(data) == true) {
+                        // $scope.arrTagsBusca = data;
+                        $scope.arrTagsBusca = [];
+                        for (arrTags in data) {
+                            $scope.arrTagsBusca.push(
+                                data[arrTags].ds_tag
+                            );
+                        }
+                    }
+                }
+            );
+        }
+
+        $scope.doBusca = function()
+        {
+            var arrDados = {
+                dt_inicial : $scope.dt_inicial,
+                dt_final : $scope.dt_final,
+                arrTags : $scope.arrTagsBuscaSelecionados
+            }
+
+            $http.post(
+                'ajax/buscar_historico.php',
+                arrDados
+            )
+            .success(
+                function(data){
+                    $scope.arrHistoricoRecente = data;
+                    $scope.closeSideNav();
+                }
+            );
+        }
+
+        $scope.getListaTags();
+
 }
+
+
+
+/*App.controller(
+    'LeftCtrl',
+    function (
+        $scope,
+        $timeout,
+        $mdSidenav,
+        $element,
+        $http
+    ) {
+
+
+        $scope.getListaTags();
+    }
+);*/
